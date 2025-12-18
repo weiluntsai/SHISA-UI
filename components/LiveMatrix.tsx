@@ -1,13 +1,18 @@
 
 import React, { useState } from 'react';
-import { Grid, LayoutTemplate, Layers, Search, Bell } from 'lucide-react';
+import { Grid, LayoutTemplate, Layers, Search, Bell, Menu } from 'lucide-react';
 import VideoFeed from './VideoFeed';
 import Timeline from './Timeline';
 import LanguageSelector from './LanguageSelector';
 import { CHANNELS } from '../constants';
 import { useLanguage } from '../LanguageContext';
 
-const LiveMatrix: React.FC = () => {
+interface LiveMatrixProps {
+  onToggleSidebar?: () => void;
+  isSidebarVisible?: boolean;
+}
+
+const LiveMatrix: React.FC<LiveMatrixProps> = ({ onToggleSidebar, isSidebarVisible }) => {
   const [gridSize, setGridSize] = useState(4);
   const { t } = useLanguage();
 
@@ -24,6 +29,15 @@ const LiveMatrix: React.FC = () => {
         <div className="h-14 bg-[#111111] border-b border-gray-800 flex items-center justify-between px-2 md:px-4 z-10 shrink-0">
            {/* Left: View Controls */}
            <div className="flex items-center gap-2">
+              <button 
+                onClick={onToggleSidebar}
+                className={`p-2 rounded hover:bg-gray-800 text-gray-400 transition-colors ${isSidebarVisible ? 'text-blue-400' : ''}`}
+                title="Toggle Sidebar"
+              >
+                <Menu size={20} />
+              </button>
+              <div className="h-6 w-px bg-gray-800 mx-1"></div>
+              
               <span className="text-sm font-medium text-gray-400 mr-2 hidden lg:block">{t.views}</span>
               <div className="flex bg-gray-800 rounded p-1 gap-1">
                  <button 

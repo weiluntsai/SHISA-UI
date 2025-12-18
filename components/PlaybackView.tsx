@@ -1,6 +1,6 @@
 
 import React, { useState } from 'react';
-import { ChevronRight, ChevronDown, RotateCcw, RotateCw, Pause, Lock, Download, Bell, ShieldCheck, User, Power, Settings2 } from 'lucide-react';
+import { ChevronRight, ChevronDown, RotateCcw, RotateCw, Pause, Lock, Download, Bell, ShieldCheck, User, Power, Settings2, Menu } from 'lucide-react';
 import VideoFeed from './VideoFeed';
 import Timeline from './Timeline';
 import LanguageSelector from './LanguageSelector';
@@ -16,7 +16,12 @@ const ToggleSwitch = ({ enabled, onChange }: { enabled: boolean; onChange: () =>
   </button>
 );
 
-const PlaybackView: React.FC = () => {
+interface PlaybackViewProps {
+  onToggleSidebar?: () => void;
+  isSidebarVisible?: boolean;
+}
+
+const PlaybackView: React.FC<PlaybackViewProps> = ({ onToggleSidebar, isSidebarVisible }) => {
   const activeChannel = CHANNELS[0];
   const { t } = useLanguage();
   const [activeTab, setActiveTab] = useState<'video' | 'info' | 'analytics'>('video');
@@ -29,6 +34,15 @@ const PlaybackView: React.FC = () => {
         {/* Playback Header */}
         <div className="h-14 bg-[#111111] border-b border-gray-800 flex items-center justify-between px-2 md:px-4 z-10 shrink-0">
            <div className="flex items-center gap-1 md:gap-2 text-sm text-gray-400">
+               <button 
+                onClick={onToggleSidebar}
+                className={`p-2 rounded hover:bg-gray-800 text-gray-400 transition-colors ${isSidebarVisible ? 'text-blue-400' : ''}`}
+                title="Toggle Sidebar"
+               >
+                <Menu size={20} />
+               </button>
+               <div className="h-6 w-px bg-gray-800 mx-1"></div>
+
                <span className="hover:text-white cursor-pointer transition-colors hidden sm:block">{t.shisaCloud}</span>
                <ChevronRight size={14} className="text-gray-600 hidden sm:block" />
                <span className="hover:text-white cursor-pointer transition-colors hidden xs:block">{t.newsChannels}</span>
@@ -153,7 +167,7 @@ const PlaybackView: React.FC = () => {
             )}
         </div>
 
-        {/* Footer Area with Redesigned Playback UI */}
+        {/* Footer Area */}
         <div className="bg-[#111111] border-t border-gray-800 shrink-0">
             <Timeline hideControls={true} /> 
             
