@@ -58,8 +58,7 @@ const VideoFeed: React.FC<VideoFeedProps> = ({ channel }) => {
 
       {channel.status === 'error' && (
         <div className="absolute inset-0 flex items-center justify-center flex-col text-gray-400 bg-black/20">
-           <Activity size={24} className="md:size-32 mb-2 opacity-20 animate-pulse text-amber-500" />
-           <span className="text-[10px] md:text-xs font-mono uppercase tracking-[0.2em] text-white/40 font-bold px-2 py-1 border border-white/10 rounded backdrop-blur-sm">
+           <span className="text-[10px] md:text-xs font-mono uppercase tracking-[0.2em] text-white/40 font-bold px-2 py-1 border border-white/10 rounded backdrop-blur-sm transition-all group-hover:text-white/60">
              {t.signalLost}
            </span>
         </div>
