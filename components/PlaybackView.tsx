@@ -18,7 +18,8 @@ import {
   Power, 
   Settings2, 
   Menu,
-  Calendar
+  Calendar,
+  ArrowLeft
 } from 'lucide-react';
 import VideoFeed from './VideoFeed';
 import Timeline from './Timeline';
@@ -113,6 +114,15 @@ const PlaybackView: React.FC<PlaybackViewProps> = ({ onToggleSidebar, isSidebarV
                >
                 <Menu size={20} {...iconProps} />
                </button>
+
+               <button 
+                onClick={onNavigateToLive}
+                className="p-2 rounded hover:bg-gray-100 dark:hover:bg-slate-800 text-gray-500 dark:text-gray-400 transition-colors sm:hidden"
+                title={t.liveMatrix}
+               >
+                <ArrowLeft size={20} {...iconProps} />
+               </button>
+
                <div className="h-6 w-px bg-gray-200 dark:bg-slate-800 mx-1"></div>
 
                <span 
@@ -183,7 +193,7 @@ const PlaybackView: React.FC<PlaybackViewProps> = ({ onToggleSidebar, isSidebarV
         </div>
 
         {/* Content Area */}
-        <div className="flex-1 bg-gray-50 dark:bg-slate-950 flex flex-col items-center justify-center overflow-hidden p-4 md:p-6 transition-colors duration-200">
+        <div className="flex-1 bg-gray-50 dark:bg-slate-950 flex flex-col items-center justify-center overflow-hidden p-2 md:p-6 transition-colors duration-200">
             {activeTab === 'video' ? (
                 <div className="w-full h-full max-w-6xl max-h-[75vh] bg-black border border-gray-200 dark:border-slate-800 relative shadow-2xl rounded-sm overflow-hidden ring-1 ring-black/5">
                     <VideoFeed channel={channel} />
@@ -271,14 +281,14 @@ const PlaybackView: React.FC<PlaybackViewProps> = ({ onToggleSidebar, isSidebarV
               onPositionChange={setPlaybackPosition}
             /> 
             
-            <div className="px-4 py-3 flex flex-col 2xl:flex-row items-center justify-between gap-4 border-t border-gray-100 dark:border-slate-800 bg-gray-50/30 dark:bg-slate-950/30">
-                <div className="flex flex-col md:flex-row items-center gap-4 w-full 2xl:w-auto justify-between md:justify-center 2xl:justify-start">
+            <div className="px-4 py-3 flex flex-col xl:flex-row items-center justify-between gap-4 border-t border-gray-100 dark:border-slate-800 bg-gray-50/30 dark:bg-slate-950/30">
+                <div className="flex flex-col md:flex-row items-center gap-4 w-full xl:w-auto justify-between md:justify-center xl:justify-start">
                     {/* Date Picker Section */}
-                    <div className="flex items-center gap-4 p-1 bg-white dark:bg-slate-800 rounded-lg border border-gray-200 dark:border-slate-700 shadow-sm shrink-0">
-                         <div className="relative">
+                    <div className="flex items-center justify-between w-full md:w-auto gap-4 p-1 bg-white dark:bg-slate-800 rounded-lg border border-gray-200 dark:border-slate-700 shadow-sm shrink-0">
+                         <div className="relative flex-1 md:flex-none">
                               <button 
                                 onClick={() => setShowDatePicker(!showDatePicker)}
-                                className={`flex items-center gap-2 px-3 py-1.5 hover:bg-gray-50 dark:hover:bg-slate-700 rounded transition-all`}
+                                className={`flex items-center justify-center w-full md:w-auto gap-2 px-3 py-1.5 hover:bg-gray-50 dark:hover:bg-slate-700 rounded transition-all`}
                               >
                                  <span className="text-sm font-mono font-bold text-blue-600 dark:text-blue-400">{formatDateValue(selectedDate)}</span>
                                  <Calendar size={16} className="text-gray-400 dark:text-gray-500" {...iconProps} />
@@ -294,9 +304,10 @@ const PlaybackView: React.FC<PlaybackViewProps> = ({ onToggleSidebar, isSidebarV
                               )}
                          </div>
                          
-                         <div className="h-5 w-px bg-gray-200 dark:bg-slate-700"></div>
+                         <div className="h-5 w-px bg-gray-200 dark:bg-slate-700 hidden md:block"></div>
 
-                         <div className="flex items-center gap-1 px-2">
+                         {/* Time Inputs - Hidden on mobile */}
+                         <div className="items-center gap-1 px-2 hidden md:flex">
                               <input type="text" value={timeInput.h} onChange={(e) => setTimeInput({...timeInput, h: e.target.value})} className="w-7 h-7 text-center text-lg font-mono font-bold text-blue-600 dark:text-blue-400 bg-transparent focus:outline-none focus:bg-gray-100 dark:focus:bg-slate-700 rounded" />
                               <span className="text-gray-300 font-bold">:</span>
                               <input type="text" value={timeInput.m} onChange={(e) => setTimeInput({...timeInput, m: e.target.value})} className="w-7 h-7 text-center text-lg font-mono font-bold text-blue-600 dark:text-blue-400 bg-transparent focus:outline-none focus:bg-gray-100 dark:focus:bg-slate-700 rounded" />
@@ -305,11 +316,11 @@ const PlaybackView: React.FC<PlaybackViewProps> = ({ onToggleSidebar, isSidebarV
                          </div>
                     </div>
 
-                    <div className="hidden md:block h-8 w-px bg-gray-200 dark:bg-slate-700 mx-2"></div>
+                    <div className="hidden xl:block h-8 w-px bg-gray-200 dark:bg-slate-700 mx-2"></div>
 
                     {/* Main Playback Controls Group */}
-                    <div className="flex items-center gap-6">
-                        <div className="flex items-center gap-1 md:gap-3 bg-white dark:bg-slate-800 px-4 py-1.5 rounded-full border border-gray-200 dark:border-slate-700 shadow-sm">
+                    <div className="flex items-center justify-between w-full md:w-auto gap-4 md:gap-6">
+                        <div className="flex items-center justify-center flex-1 md:flex-none gap-1 md:gap-3 bg-white dark:bg-slate-800 px-4 py-1.5 rounded-full border border-gray-200 dark:border-slate-700 shadow-sm">
                             <button 
                               onClick={() => setPlaybackPosition(0)}
                               className="p-2 rounded-full hover:bg-gray-100 dark:hover:bg-slate-700 text-gray-500 dark:text-gray-400 transition-colors"
@@ -327,9 +338,9 @@ const PlaybackView: React.FC<PlaybackViewProps> = ({ onToggleSidebar, isSidebarV
                             
                             <button 
                               onClick={() => setIsPlaying(!isPlaying)}
-                              className="p-4 rounded-full bg-blue-600 text-white hover:bg-blue-700 shadow-lg shadow-blue-200 dark:shadow-blue-900/30 transition-all active:scale-90 border-2 border-blue-500"
+                              className="p-3 md:p-4 rounded-full bg-blue-600 text-white hover:bg-blue-700 shadow-lg shadow-blue-200 dark:shadow-blue-900/30 transition-all active:scale-90 border-2 border-blue-500"
                             >
-                              {isPlaying ? <Pause size={24} {...solidIconProps} strokeWidth={0} /> : <Play size={24} {...solidIconProps} className="ml-1" strokeWidth={0} />}
+                              {isPlaying ? <Pause size={20} {...solidIconProps} strokeWidth={0} /> : <Play size={20} {...solidIconProps} className="ml-1" strokeWidth={0} />}
                             </button>
 
                             <button 
@@ -360,8 +371,8 @@ const PlaybackView: React.FC<PlaybackViewProps> = ({ onToggleSidebar, isSidebarV
                     </div>
                 </div>
 
-                {/* Secondary Controls (Time, Export) */}
-                <div className="flex-1 w-full 2xl:px-8 flex flex-col md:flex-row items-center gap-3 md:gap-4 justify-center 2xl:justify-end">
+                {/* Secondary Controls (Time, Export) - Hidden on mobile */}
+                <div className="flex-1 w-full xl:px-8 flex flex-col md:flex-row items-center gap-3 md:gap-4 justify-center xl:justify-end hidden md:flex">
                     
                     <div className="flex flex-col sm:flex-row items-center gap-2 w-full md:w-auto">
                         <div className="flex items-center gap-2 bg-white dark:bg-slate-800 p-1.5 rounded border border-gray-200 dark:border-slate-700 shadow-sm w-full md:w-auto group">

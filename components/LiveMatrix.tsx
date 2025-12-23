@@ -62,14 +62,14 @@ const LiveMatrix: React.FC<LiveMatrixProps> = ({ onToggleSidebar, isSidebarVisib
                  </button>
                  <button 
                    onClick={() => setGridSize(9)}
-                   className={`p-1.5 rounded transition-all ${gridSize === 9 ? 'bg-white dark:bg-slate-700 text-blue-600 dark:text-blue-400 shadow-sm' : 'text-gray-400 hover:text-gray-600 dark:hover:text-gray-300'}`}
+                   className={`p-1.5 rounded transition-all hidden sm:block ${gridSize === 9 ? 'bg-white dark:bg-slate-700 text-blue-600 dark:text-blue-400 shadow-sm' : 'text-gray-400 hover:text-gray-600 dark:hover:text-gray-300'}`}
                    title="3x3 View"
                  >
                    <Grid3x3 size={16} {...iconProps} />
                  </button>
                  <button 
                    onClick={() => setGridSize(16)}
-                   className={`p-1.5 rounded transition-all ${gridSize === 16 ? 'bg-white dark:bg-slate-700 text-blue-600 dark:text-blue-400 shadow-sm' : 'text-gray-400 hover:text-gray-600 dark:hover:text-gray-300'}`}
+                   className={`p-1.5 rounded transition-all hidden sm:block ${gridSize === 16 ? 'bg-white dark:bg-slate-700 text-blue-600 dark:text-blue-400 shadow-sm' : 'text-gray-400 hover:text-gray-600 dark:hover:text-gray-300'}`}
                    title="4x4 View"
                  >
                    <Grid size={16} {...iconProps} />

@@ -34,6 +34,21 @@ const Timeline: React.FC<TimelineProps> = ({ hideControls = false, position, onP
     updatePosition(e.clientX);
   };
 
+  const handleTouchStart = (e: React.TouchEvent) => {
+    isDraggingRef.current = true;
+    updatePosition(e.touches[0].clientX);
+  };
+
+  const handleTouchMove = (e: React.TouchEvent) => {
+    if (isDraggingRef.current) {
+      updatePosition(e.touches[0].clientX);
+    }
+  };
+
+  const handleTouchEnd = () => {
+    isDraggingRef.current = false;
+  };
+
   useEffect(() => {
     const handleMouseMove = (e: MouseEvent) => {
       if (isDraggingRef.current) {
@@ -97,7 +112,7 @@ const Timeline: React.FC<TimelineProps> = ({ hideControls = false, position, onP
               </div>
 
               {/* Time Input Section */}
-              <div className="flex items-center gap-1">
+              <div className="flex items-center gap-1 hidden sm:flex">
                   <input 
                     type="text" 
                     value={timeInput.h}
@@ -120,7 +135,7 @@ const Timeline: React.FC<TimelineProps> = ({ hideControls = false, position, onP
                   />
               </div>
 
-              <div className="h-4 w-px bg-gray-300 dark:bg-slate-700 mx-1"></div>
+              <div className="h-4 w-px bg-gray-300 dark:bg-slate-700 mx-1 hidden sm:block"></div>
 
               {/* Playback Controls */}
               <div className="flex gap-2">
@@ -144,12 +159,15 @@ const Timeline: React.FC<TimelineProps> = ({ hideControls = false, position, onP
       <div 
         ref={containerRef}
         onMouseDown={handleMouseDown}
-        className="flex-1 relative overflow-hidden cursor-ew-resize group bg-gray-50/20 dark:bg-slate-900/50"
+        onTouchStart={handleTouchStart}
+        onTouchMove={handleTouchMove}
+        onTouchEnd={handleTouchEnd}
+        className="flex-1 relative overflow-hidden cursor-ew-resize group bg-gray-50/20 dark:bg-slate-900/50 touch-none"
       >
         {/* Interactive Cursor */}
         <div 
-          className="absolute top-0 bottom-0 w-0.5 bg-blue-500 z-30 shadow-[0_0_10px_rgba(59,130,246,0.5)] transition-shadow duration-150"
-          style={{ left: `${position}%`, cursor: 'grab' }}
+          className="absolute top-0 bottom-0 w-0.5 bg-blue-500 z-30 shadow-[0_0_10px_rgba(59,130,246,0.5)] transition-shadow duration-150 pointer-events-none"
+          style={{ left: `${position}%` }}
         >
            <div className="absolute top-0 -translate-x-1/2 -mt-1 w-0 h-0 border-l-[6px] border-l-transparent border-r-[6px] border-r-transparent border-t-[8px] border-t-blue-500"></div>
            <div className="absolute top-4 -translate-x-1/2 bg-blue-500 text-white text-[10px] font-bold px-1 rounded shadow-md pointer-events-none opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap z-50">
@@ -157,7 +175,7 @@ const Timeline: React.FC<TimelineProps> = ({ hideControls = false, position, onP
            </div>
         </div>
 
-        <div className="absolute inset-0 flex items-end">
+        <div className="absolute inset-0 flex items-end pointer-events-none">
            {hours.map(hour => (
              <div key={hour} className="flex-1 flex flex-col items-start h-full justify-end border-l border-gray-100 dark:border-slate-800 relative group-hover:border-gray-200/50 dark:group-hover:border-slate-700/50 transition-colors">
                 {/* Recording Blocks - Randomly placed for demo effect */}
@@ -168,7 +186,7 @@ const Timeline: React.FC<TimelineProps> = ({ hideControls = false, position, onP
                   <div className="absolute bottom-4 left-0 right-1/2 h-3 bg-blue-400/30"></div>
                 )}
                 
-                <span className={`text-xs text-gray-400 dark:text-gray-500 font-mono ml-1 mb-2 font-bold select-none ${hour % 3 !== 0 ? 'hidden md:block' : ''}`}>
+                <span className={`text-xs text-gray-500 dark:text-white font-mono ml-1 mb-2 font-bold select-none ${hour % 3 !== 0 ? 'hidden md:block' : ''}`}>
                     {hour.toString().padStart(2, '0')}:00
                 </span>
                 <div className="h-2 w-px bg-gray-300 dark:bg-slate-700"></div>
