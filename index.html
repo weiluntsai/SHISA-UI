@@ -10,6 +10,9 @@
             darkMode: 'class',
             theme: {
                 extend: {
+                    fontSize: {
+                        base: ['0.875rem', { lineHeight: '1.25rem' }],
+                    },
                     textColor: {
                         'gray-500': 'rgb(50, 50, 50)',
                     },
@@ -33,7 +36,7 @@
 }
 </script>
 </head>
-<body class="bg-gray-50 text-gray-900 antialiased overflow-hidden transition-colors duration-200">
+<body class="bg-gray-50 text-gray-900 antialiased overflow-hidden transition-colors duration-200 text-base">
     <div id="root"></div>
     <script type="module" src="/index.tsx"></script>
 </body>
