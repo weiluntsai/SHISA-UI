@@ -102,6 +102,19 @@ const PlaybackView: React.FC<PlaybackViewProps> = ({ onToggleSidebar, isSidebarV
   // Props for solid playback icons
   const solidIconProps = { ...iconProps, fill: "currentColor" };
 
+  const SpeedControl = ({ mobile = false }: { mobile?: boolean }) => (
+    <div className={`flex items-center ${mobile ? 'gap-2 bg-white dark:bg-slate-800 px-3 py-1.5 rounded-lg border border-gray-200 dark:border-slate-700 shadow-sm h-full' : 'flex-col'}`}>
+        {!mobile && <span className="text-xs text-gray-400 dark:text-gray-500 uppercase tracking-widest font-black mb-1">{t.speed}</span>}
+        {mobile && <span className="text-xs text-gray-400 dark:text-gray-500 font-black uppercase tracking-widest mr-1">{t.speed}</span>}
+        <button 
+        onClick={cycleSpeed}
+        className={`flex items-center gap-1 ${mobile ? 'text-blue-600 dark:text-blue-400' : 'bg-blue-50 dark:bg-blue-900/20 px-3 py-1 rounded text-blue-600 dark:text-blue-400 hover:bg-blue-100 dark:hover:bg-blue-900/40'} text-xs font-black font-mono shadow-sm transition-all`}
+        >
+            {playbackSpeed.toFixed(1)}X <ChevronDown size={10} {...iconProps} />
+        </button>
+    </div>
+  );
+
   return (
     <div className="flex flex-col h-full w-full bg-gray-50 dark:bg-slate-950">
         {/* Playback Header */}
@@ -193,7 +206,7 @@ const PlaybackView: React.FC<PlaybackViewProps> = ({ onToggleSidebar, isSidebarV
         </div>
 
         {/* Content Area */}
-        <div className="flex-1 bg-gray-50 dark:bg-slate-950 flex flex-col items-center justify-center overflow-hidden p-2 md:p-6 transition-colors duration-200">
+        <div className={`flex-1 bg-gray-50 dark:bg-slate-950 flex flex-col items-center w-full transition-colors duration-200 ${activeTab === 'video' ? 'justify-center overflow-hidden p-2 md:p-6' : 'justify-start overflow-y-auto p-4 md:p-6'}`}>
             {activeTab === 'video' ? (
                 <div className="w-full h-full max-w-6xl max-h-[75vh] bg-black border border-gray-200 dark:border-slate-800 relative shadow-2xl rounded-sm overflow-hidden ring-1 ring-black/5">
                     <VideoFeed channel={channel} />
@@ -282,45 +295,54 @@ const PlaybackView: React.FC<PlaybackViewProps> = ({ onToggleSidebar, isSidebarV
             /> 
             
             <div className="px-4 py-3 flex flex-col xl:flex-row items-center justify-between gap-4 border-t border-gray-100 dark:border-slate-800 bg-gray-50/30 dark:bg-slate-950/30">
-                <div className="flex flex-col md:flex-row items-center gap-4 w-full xl:w-auto justify-between md:justify-center xl:justify-start">
-                    {/* Date Picker Section */}
-                    <div className="flex items-center justify-between w-full md:w-auto gap-4 p-1 bg-white dark:bg-slate-800 rounded-lg border border-gray-200 dark:border-slate-700 shadow-sm shrink-0">
-                         <div className="relative flex-1 md:flex-none">
-                              <button 
-                                onClick={() => setShowDatePicker(!showDatePicker)}
-                                className={`flex items-center justify-center w-full md:w-auto gap-2 px-3 py-1.5 hover:bg-gray-50 dark:hover:bg-slate-700 rounded transition-all`}
-                              >
-                                 <span className="text-sm font-mono font-bold text-blue-600 dark:text-blue-400">{formatDateValue(selectedDate)}</span>
-                                 <Calendar size={16} className="text-gray-400 dark:text-gray-500" {...iconProps} />
-                              </button>
-                              {showDatePicker && (
-                                  <div className="absolute bottom-full left-0 mb-2 z-50">
-                                    <DatePicker 
-                                        selectedDate={selectedDate} 
-                                        onChange={(d) => { setSelectedDate(d); setShowDatePicker(false); }} 
-                                        onClose={() => setShowDatePicker(false)} 
-                                    />
-                                  </div>
-                              )}
-                         </div>
-                         
-                         <div className="h-5 w-px bg-gray-200 dark:bg-slate-700 hidden md:block"></div>
+                <div className="flex flex-col md:flex-row items-center gap-3 md:gap-4 w-full xl:w-auto justify-between md:justify-center xl:justify-start">
+                    
+                    {/* Row 1 on Mobile: Date + Speed */}
+                    <div className="flex items-center w-full md:w-auto gap-2 md:gap-4">
+                        {/* Date Picker Section */}
+                        <div className="flex-1 md:flex-none flex items-center justify-between w-full md:w-auto gap-4 p-1 bg-white dark:bg-slate-800 rounded-lg border border-gray-200 dark:border-slate-700 shadow-sm shrink-0 relative">
+                             <div className="relative flex-1 md:flex-none">
+                                  <button 
+                                    onClick={() => setShowDatePicker(!showDatePicker)}
+                                    className={`flex items-center justify-center w-full md:w-auto gap-2 px-3 py-1.5 hover:bg-gray-50 dark:hover:bg-slate-700 rounded transition-all`}
+                                  >
+                                     <span className="text-sm font-mono font-bold text-blue-600 dark:text-blue-400">{formatDateValue(selectedDate)}</span>
+                                     <Calendar size={16} className="text-gray-400 dark:text-gray-500" {...iconProps} />
+                                  </button>
+                                  {showDatePicker && (
+                                      <div className="absolute bottom-full left-0 mb-2 z-50">
+                                        <DatePicker 
+                                            selectedDate={selectedDate} 
+                                            onChange={(d) => { setSelectedDate(d); setShowDatePicker(false); }} 
+                                            onClose={() => setShowDatePicker(false)} 
+                                        />
+                                      </div>
+                                  )}
+                             </div>
+                             
+                             <div className="h-5 w-px bg-gray-200 dark:bg-slate-700 hidden md:block"></div>
 
-                         {/* Time Inputs - Hidden on mobile */}
-                         <div className="items-center gap-1 px-2 hidden md:flex">
-                              <input type="text" value={timeInput.h} onChange={(e) => setTimeInput({...timeInput, h: e.target.value})} className="w-7 h-7 text-center text-lg font-mono font-bold text-blue-600 dark:text-blue-400 bg-transparent focus:outline-none focus:bg-gray-100 dark:focus:bg-slate-700 rounded" />
-                              <span className="text-gray-300 font-bold">:</span>
-                              <input type="text" value={timeInput.m} onChange={(e) => setTimeInput({...timeInput, m: e.target.value})} className="w-7 h-7 text-center text-lg font-mono font-bold text-blue-600 dark:text-blue-400 bg-transparent focus:outline-none focus:bg-gray-100 dark:focus:bg-slate-700 rounded" />
-                              <span className="text-gray-300 font-bold">:</span>
-                              <input type="text" value={timeInput.s} onChange={(e) => setTimeInput({...timeInput, s: e.target.value})} className="w-7 h-7 text-center text-lg font-mono font-bold text-blue-600 dark:text-blue-400 bg-transparent focus:outline-none focus:bg-gray-100 dark:focus:bg-slate-700 rounded" />
-                         </div>
+                             {/* Time Inputs - Hidden on mobile */}
+                             <div className="items-center gap-1 px-2 hidden md:flex">
+                                  <input type="text" value={timeInput.h} onChange={(e) => setTimeInput({...timeInput, h: e.target.value})} className="w-7 h-7 text-center text-lg font-mono font-bold text-blue-600 dark:text-blue-400 bg-transparent focus:outline-none focus:bg-gray-100 dark:focus:bg-slate-700 rounded" />
+                                  <span className="text-gray-300 font-bold">:</span>
+                                  <input type="text" value={timeInput.m} onChange={(e) => setTimeInput({...timeInput, m: e.target.value})} className="w-7 h-7 text-center text-lg font-mono font-bold text-blue-600 dark:text-blue-400 bg-transparent focus:outline-none focus:bg-gray-100 dark:focus:bg-slate-700 rounded" />
+                                  <span className="text-gray-300 font-bold">:</span>
+                                  <input type="text" value={timeInput.s} onChange={(e) => setTimeInput({...timeInput, s: e.target.value})} className="w-7 h-7 text-center text-lg font-mono font-bold text-blue-600 dark:text-blue-400 bg-transparent focus:outline-none focus:bg-gray-100 dark:focus:bg-slate-700 rounded" />
+                             </div>
+                        </div>
+
+                        {/* Mobile Speed Control (Visible only on mobile) */}
+                        <div className="md:hidden h-full">
+                            <SpeedControl mobile={true} />
+                        </div>
                     </div>
 
                     <div className="hidden xl:block h-8 w-px bg-gray-200 dark:bg-slate-700 mx-2"></div>
 
                     {/* Main Playback Controls Group */}
                     <div className="flex items-center justify-between w-full md:w-auto gap-4 md:gap-6">
-                        <div className="flex items-center justify-center flex-1 md:flex-none gap-1 md:gap-3 bg-white dark:bg-slate-800 px-4 py-1.5 rounded-full border border-gray-200 dark:border-slate-700 shadow-sm">
+                        <div className="flex items-center justify-between md:justify-center w-full md:w-auto gap-2 md:gap-3 bg-white dark:bg-slate-800 px-4 py-2 md:py-1.5 rounded-xl md:rounded-full border border-gray-200 dark:border-slate-700 shadow-sm">
                             <button 
                               onClick={() => setPlaybackPosition(0)}
                               className="p-2 rounded-full hover:bg-gray-100 dark:hover:bg-slate-700 text-gray-500 dark:text-gray-400 transition-colors"
@@ -338,7 +360,7 @@ const PlaybackView: React.FC<PlaybackViewProps> = ({ onToggleSidebar, isSidebarV
                             
                             <button 
                               onClick={() => setIsPlaying(!isPlaying)}
-                              className="p-3 md:p-4 rounded-full bg-blue-600 text-white hover:bg-blue-700 shadow-lg shadow-blue-200 dark:shadow-blue-900/30 transition-all active:scale-90 border-2 border-blue-500"
+                              className="p-3 md:p-4 rounded-full bg-blue-600 text-white hover:bg-blue-700 shadow-lg shadow-blue-200 dark:shadow-blue-900/30 transition-all active:scale-90 border-2 border-blue-500 mx-1 md:mx-0"
                             >
                               {isPlaying ? <Pause size={20} {...solidIconProps} strokeWidth={0} /> : <Play size={20} {...solidIconProps} className="ml-1" strokeWidth={0} />}
                             </button>
@@ -359,14 +381,9 @@ const PlaybackView: React.FC<PlaybackViewProps> = ({ onToggleSidebar, isSidebarV
                             </button>
                         </div>
                         
-                        <div className="flex flex-col items-center">
-                           <span className="text-xs text-gray-400 dark:text-gray-500 uppercase tracking-widest font-black mb-1">{t.speed}</span>
-                           <button 
-                            onClick={cycleSpeed}
-                            className="flex items-center gap-1 bg-blue-50 dark:bg-blue-900/20 px-3 py-1 rounded text-blue-600 dark:text-blue-400 hover:bg-blue-100 dark:hover:bg-blue-900/40 text-xs font-black font-mono shadow-sm transition-all"
-                           >
-                              {playbackSpeed.toFixed(1)}X <ChevronDown size={10} {...iconProps} />
-                           </button>
+                        {/* Desktop Speed Control (Hidden on mobile) */}
+                        <div className="hidden md:block">
+                            <SpeedControl mobile={false} />
                         </div>
                     </div>
                 </div>
