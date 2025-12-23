@@ -3,7 +3,7 @@ export const translations = {
   en: {
     monitor: "Monitor",
     system: "System",
-    liveMatrix: "Live Matrix",
+    liveMatrix: "All Channels",
     playback: "Playback",
     events: "Events",
     downloads: "Downloads",
@@ -42,7 +42,7 @@ export const translations = {
   zh: {
     monitor: "監控",
     system: "系統",
-    liveMatrix: "即時監控",
+    liveMatrix: "所有頻道",
     playback: "錄影回放",
     events: "事件記錄",
     downloads: "下載管理",

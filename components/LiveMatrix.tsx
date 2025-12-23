@@ -1,9 +1,8 @@
-
 import React, { useState } from 'react';
 import { Grid, LayoutTemplate, Layers, Search, Bell, Menu } from 'lucide-react';
 import VideoFeed from './VideoFeed';
 import Timeline from './Timeline';
-import LanguageSelector from './LanguageSelector';
+import ProfileDropdown from './ProfileDropdown';
 import { CHANNELS } from '../constants';
 import { useLanguage } from '../LanguageContext';
 
@@ -15,7 +14,10 @@ interface LiveMatrixProps {
 
 const LiveMatrix: React.FC<LiveMatrixProps> = ({ onToggleSidebar, isSidebarVisible, onChannelSelect }) => {
   const [gridSize, setGridSize] = useState(4);
+  const [position, setPosition] = useState(100); // Live usually at the end
   const { t } = useLanguage();
+  
+  const iconProps = { strokeLinecap: "square" as const, strokeLinejoin: "miter" as const };
 
   const getGridCols = () => {
     if (gridSize === 2) return 'grid-cols-1 sm:grid-cols-2 lg:grid-cols-2';
@@ -25,70 +27,42 @@ const LiveMatrix: React.FC<LiveMatrixProps> = ({ onToggleSidebar, isSidebarVisib
   };
 
   return (
-    <div className="flex flex-col h-full w-full">
+    <div className="flex flex-col h-full w-full bg-white dark:bg-slate-950">
         {/* Top Header / Toolbar */}
-        <div className="h-14 bg-[#111111] border-b border-gray-800 flex items-center justify-between px-2 md:px-4 z-10 shrink-0">
+        <div className="h-14 bg-white dark:bg-slate-900 border-b border-gray-200 dark:border-slate-800 flex items-center justify-between px-2 md:px-4 z-10 shrink-0 transition-colors duration-200">
            {/* Left: View Controls */}
            <div className="flex items-center gap-2">
               <button 
                 onClick={onToggleSidebar}
-                className={`p-2 rounded hover:bg-gray-800 text-gray-400 transition-colors ${isSidebarVisible ? 'text-blue-400' : ''}`}
+                className={`p-2 rounded hover:bg-gray-100 dark:hover:bg-slate-800 text-gray-500 dark:text-gray-400 transition-colors ${isSidebarVisible ? 'text-blue-600 dark:text-blue-400 bg-blue-50 dark:bg-blue-900/20' : ''}`}
                 title="Toggle Sidebar"
               >
-                <Menu size={20} />
+                <Menu size={20} {...iconProps} />
               </button>
-              <div className="h-6 w-px bg-gray-800 mx-1"></div>
-              
-              <span className="text-sm font-medium text-gray-400 mr-2 hidden lg:block">{t.views}</span>
-              <div className="flex bg-gray-800 rounded p-1 gap-1">
-                 <button 
-                    onClick={() => setGridSize(2)}
-                    className={`p-1 rounded transition-colors ${gridSize === 2 ? 'bg-gray-700 text-white shadow-sm' : 'text-gray-400 hover:text-white hover:bg-gray-700'}`}
-                 >
-                    <Grid size={16} />
-                 </button>
-                 <button 
-                    onClick={() => setGridSize(4)}
-                    className={`p-1 rounded transition-colors ${gridSize === 4 ? 'bg-gray-700 text-white shadow-sm' : 'text-gray-400 hover:text-white hover:bg-gray-700'}`}
-                 >
-                    <LayoutTemplate size={16} />
-                 </button>
-                 <button 
-                    onClick={() => setGridSize(9)}
-                    className={`p-1 rounded transition-colors ${gridSize === 9 ? 'bg-gray-700 text-white shadow-sm' : 'text-gray-400 hover:text-white hover:bg-gray-700'}`}
-                 >
-                    <Layers size={16} />
-                 </button>
-              </div>
-              <div className="h-4 w-px bg-gray-700 mx-2 hidden md:block"></div>
-              <span className="text-sm font-semibold text-white truncate max-w-[100px] md:max-w-none">{t.defaultViewGroup}</span>
            </div>
 
            {/* Right: Search & Profile & Language */}
            <div className="flex items-center gap-2 md:gap-4">
               <div className="relative hidden md:block">
-                 <Search size={14} className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-500" />
+                 <Search size={14} className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 dark:text-gray-500" {...iconProps} />
                  <input 
                    type="text" 
                    placeholder={t.findCamera}
-                   className="bg-[#050505] border border-gray-700 text-sm rounded-full pl-9 pr-4 py-1.5 w-48 lg:w-64 text-gray-300 focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500 placeholder-gray-600 transition-all"
+                   className="bg-gray-100 dark:bg-slate-800 border border-gray-200 dark:border-slate-700 text-base rounded-full pl-9 pr-4 py-1.5 w-48 lg:w-64 text-gray-800 dark:text-gray-200 focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-200 dark:focus:ring-blue-800 placeholder-gray-400 transition-all shadow-inner"
                  />
               </div>
-
-              <LanguageSelector />
               
-              <button className="relative p-2 text-gray-400 hover:text-white transition-colors">
-                 <Bell size={18} />
-                 <span className="absolute top-1.5 right-1.5 w-2 h-2 bg-red-500 rounded-full border-2 border-[#111111]"></span>
+              <button className="relative p-2 text-gray-400 dark:text-gray-500 hover:text-blue-600 dark:hover:text-blue-400 transition-colors">
+                 <Bell size={18} {...iconProps} />
+                 <span className="absolute top-1.5 right-1.5 w-2 h-2 bg-red-500 rounded-full border-2 border-white dark:border-slate-900 shadow-sm"></span>
               </button>
-              <div className="w-8 h-8 rounded-full bg-gradient-to-tr from-purple-500 to-blue-500 flex items-center justify-center text-xs font-bold text-white border-2 border-[#111111] shadow-sm cursor-pointer hover:opacity-90 transition-opacity">
-                AD
-              </div>
+              
+              <ProfileDropdown />
            </div>
         </div>
 
         {/* Video Grid Area */}
-        <div className="flex-1 bg-black p-0.5 overflow-y-auto md:overflow-hidden relative">
+        <div className="flex-1 bg-gray-100 dark:bg-slate-950 p-0.5 overflow-y-auto md:overflow-hidden relative transition-colors duration-200">
            <div className={`grid gap-0.5 w-full h-full min-h-[50vh] auto-rows-fr ${getGridCols()}`}>
               {CHANNELS.map(channel => (
                 <div key={channel.id} onClick={() => onChannelSelect(channel.id)} className="cursor-pointer h-full">
@@ -99,7 +73,7 @@ const LiveMatrix: React.FC<LiveMatrixProps> = ({ onToggleSidebar, isSidebarVisib
         </div>
 
         {/* Timeline Docker */}
-        <Timeline />
+        <Timeline position={position} onPositionChange={setPosition} />
     </div>
   );
 };

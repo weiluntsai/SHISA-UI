@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { Maximize2, Settings, MoreVertical, Activity } from 'lucide-react';
 import { Channel } from '../types';
@@ -14,71 +13,70 @@ const VideoFeed: React.FC<VideoFeedProps> = ({ channel }) => {
 
   return (
     <div 
-      className="relative w-full h-full bg-black group overflow-hidden border border-gray-800 hover:border-gray-600 transition-colors"
+      className="relative w-full h-full bg-slate-900 group overflow-hidden border border-gray-200 hover:border-blue-400 transition-all"
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
     >
-      <div className={`absolute inset-0 bg-gradient-to-br ${channel.color} opacity-40 animate-pulse-slow`}></div>
-      <div className="absolute inset-0 opacity-10 pointer-events-none bg-[url('https://transparenttextures.com/patterns/carbon-fibre.png')]"></div>
-      <div className="absolute inset-0 opacity-20 pointer-events-none" 
+      {/* Background Effect */}
+      <div className="absolute inset-0 bg-gradient-to-br from-gray-700 to-gray-900 opacity-20 animate-pulse-slow"></div>
+      <div className="absolute inset-0 opacity-5 pointer-events-none bg-[url('https://transparenttextures.com/patterns/carbon-fibre.png')]"></div>
+      <div className="absolute inset-0 opacity-10 pointer-events-none" 
            style={{
-             backgroundImage: 'linear-gradient(rgba(255, 255, 255, 0.05) 1px, transparent 1px), linear-gradient(90deg, rgba(255, 255, 255, 0.05) 1px, transparent 1px)', 
+             backgroundImage: 'linear-gradient(rgba(255, 255, 255, 0.1) 1px, transparent 1px), linear-gradient(90deg, rgba(255, 255, 255, 0.1) 1px, transparent 1px)', 
              backgroundSize: '20px 20px'
            }}>
       </div>
 
-      <div className="absolute top-0 left-0 right-0 p-2 flex justify-between items-start bg-gradient-to-b from-black/80 to-transparent">
+      {/* Top Overlay - Glassmorphism */}
+      <div className="absolute top-0 left-0 right-0 p-2 flex justify-between items-start bg-gradient-to-b from-black/40 to-transparent">
         <div className="flex items-center gap-2">
-          <span className="text-xs font-mono text-white/90 bg-black/40 px-1.5 py-0.5 rounded border border-white/10">
+          <span className="text-xs font-mono text-white bg-black/40 backdrop-blur-md px-1.5 py-0.5 rounded border border-white/20">
             CH-{channel.id.toString().padStart(2, '0')}
           </span>
-          <span className="text-sm font-semibold text-white shadow-sm truncate max-w-[120px] md:max-w-[200px]">
+          <span className="text-base font-bold text-white drop-shadow-md truncate max-w-[120px] md:max-w-[200px]">
             {channel.name}
           </span>
         </div>
         <div className="flex items-center gap-2">
            {channel.status === 'live' && (
-             <div className="flex items-center gap-1.5 bg-red-500/20 px-2 py-0.5 rounded-full border border-red-500/30">
-               <div className="w-1.5 h-1.5 rounded-full bg-red-500 animate-pulse"></div>
-               <span className="text-[10px] font-bold text-red-400">{t.live}</span>
+             <div className="flex items-center gap-1.5 bg-red-500/80 backdrop-blur-md px-2 py-0.5 rounded-full border border-white/20 shadow-sm">
+               <div className="w-1.5 h-1.5 rounded-full bg-white animate-pulse"></div>
+               <span className="text-xs font-black text-white">{t.live}</span>
              </div>
            )}
            {channel.status === 'recording' && (
-             <div className="flex items-center gap-1.5 bg-blue-500/20 px-2 py-0.5 rounded-full border border-blue-500/30">
-               <div className="w-1.5 h-1.5 rounded-full bg-blue-500"></div>
-               <span className="text-[10px] font-bold text-blue-400">{t.rec}</span>
+             <div className="flex items-center gap-1.5 bg-blue-500/80 backdrop-blur-md px-2 py-0.5 rounded-full border border-white/20 shadow-sm">
+               <div className="w-1.5 h-1.5 rounded-full bg-white"></div>
+               <span className="text-xs font-black text-white">{t.rec}</span>
              </div>
            )}
            {channel.status === 'error' && (
-             <div className="flex items-center gap-1.5 bg-yellow-500/20 px-2 py-0.5 rounded-full border border-yellow-500/30">
-               <Activity size={10} className="text-yellow-500" />
-               <span className="text-[10px] font-bold text-yellow-500">{t.noSignal}</span>
+             <div className="flex items-center gap-1.5 bg-amber-500/80 backdrop-blur-md px-2 py-0.5 rounded-full border border-white/20 shadow-sm">
+               <Activity size={10} className="text-white" />
+               <span className="text-xs font-black text-white">{t.noSignal}</span>
              </div>
            )}
         </div>
       </div>
 
       {channel.status === 'error' && (
-        <div className="absolute inset-0 flex items-center justify-center flex-col text-gray-500">
-           <Activity size={32} className="mb-2 opacity-50" />
-           <span className="text-xs font-mono uppercase tracking-widest">{t.signalLost}</span>
+        <div className="absolute inset-0 flex items-center justify-center flex-col text-gray-400">
+           <Activity size={32} className="mb-2 opacity-30" />
+           <span className="text-xs font-mono uppercase tracking-widest text-white/50">{t.signalLost}</span>
         </div>
       )}
        {channel.status === 'loading' && (
-        <div className="absolute inset-0 flex items-center justify-center flex-col text-gray-500">
-           <div className="w-8 h-8 border-2 border-gray-600 border-t-blue-500 rounded-full animate-spin mb-2"></div>
-           <span className="text-xs font-mono uppercase tracking-widest">{t.connecting}</span>
+        <div className="absolute inset-0 flex items-center justify-center flex-col">
+           <div className="w-8 h-8 border-2 border-white/10 border-t-blue-400 rounded-full animate-spin mb-2"></div>
+           <span className="text-xs font-mono uppercase tracking-widest text-white/50">{t.connecting}</span>
         </div>
       )}
 
-      <div className="absolute bottom-2 left-2 font-mono text-xs text-green-400/80 bg-black/60 px-1 rounded">
-        {new Date().toLocaleTimeString()} <span className="text-gray-400">|</span> 30FPS
-      </div>
-
-      <div className={`absolute bottom-2 right-2 flex gap-1 transition-opacity duration-200 ${isHovered ? 'opacity-100' : 'opacity-0'}`}>
-        <button className="p-1.5 hover:bg-white/20 rounded text-white transition-colors"><Maximize2 size={14} /></button>
-        <button className="p-1.5 hover:bg-white/20 rounded text-white transition-colors"><Settings size={14} /></button>
-        <button className="p-1.5 hover:bg-white/20 rounded text-white transition-colors"><MoreVertical size={14} /></button>
+      {/* Hover Controls */}
+      <div className={`absolute bottom-2 right-2 flex gap-1 transition-all duration-300 ${isHovered ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-1'}`}>
+        <button className="p-1.5 bg-white/10 hover:bg-white/30 backdrop-blur-md rounded border border-white/20 text-white transition-all shadow-sm"><Maximize2 size={14} /></button>
+        <button className="p-1.5 bg-white/10 hover:bg-white/30 backdrop-blur-md rounded border border-white/20 text-white transition-all shadow-sm"><Settings size={14} /></button>
+        <button className="p-1.5 bg-white/10 hover:bg-white/30 backdrop-blur-md rounded border border-white/20 text-white transition-all shadow-sm"><MoreVertical size={14} /></button>
       </div>
     </div>
   );

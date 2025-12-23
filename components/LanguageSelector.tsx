@@ -1,4 +1,3 @@
-
 import React, { useState, useRef, useEffect } from 'react';
 import { Globe, ChevronDown } from 'lucide-react';
 import { useLanguage } from '../LanguageContext';
@@ -28,15 +27,15 @@ const LanguageSelector: React.FC = () => {
     <div className="relative" ref={dropdownRef}>
       <button
         onClick={() => setIsOpen(!isOpen)}
-        className="flex items-center gap-2 bg-gray-800 hover:bg-gray-700 text-white px-3 py-1.5 rounded text-[10px] font-bold transition-all border border-gray-700 shadow-sm"
+        className="flex items-center gap-2 bg-white hover:bg-gray-50 text-gray-700 px-3 py-1.5 rounded text-[10px] font-black transition-all border border-gray-200 shadow-sm"
       >
-        <Globe size={14} className="text-blue-400" />
+        <Globe size={14} className="text-blue-500" />
         <span>{language.toUpperCase()}</span>
         <ChevronDown size={12} className={`transition-transform duration-200 ${isOpen ? 'rotate-180' : ''}`} />
       </button>
 
       {isOpen && (
-        <div className="absolute right-0 mt-2 w-32 bg-[#1a1a1a] border border-gray-700 rounded shadow-xl z-50 overflow-hidden animate-in fade-in zoom-in-95 duration-100">
+        <div className="absolute right-0 mt-2 w-32 bg-white border border-gray-200 rounded-lg shadow-2xl z-50 overflow-hidden animate-in fade-in zoom-in-95 duration-100 ring-1 ring-black/5">
           {options.map((option) => (
             <button
               key={option.value}
@@ -44,12 +43,12 @@ const LanguageSelector: React.FC = () => {
                 setLanguage(option.value);
                 setIsOpen(false);
               }}
-              className={`w-full text-left px-4 py-2 text-xs transition-colors flex items-center justify-between
-                ${language === option.value ? 'bg-blue-600/20 text-blue-400' : 'text-gray-300 hover:bg-gray-800 hover:text-white'}
+              className={`w-full text-left px-4 py-2.5 text-xs font-bold transition-colors flex items-center justify-between
+                ${language === option.value ? 'bg-blue-50 text-blue-600' : 'text-gray-600 hover:bg-gray-50 hover:text-gray-900'}
               `}
             >
               {option.label}
-              {language === option.value && <div className="w-1 h-1 rounded-full bg-blue-400"></div>}
+              {language === option.value && <div className="w-1.5 h-1.5 rounded-full bg-blue-500 shadow-sm"></div>}
             </button>
           ))}
         </div>
