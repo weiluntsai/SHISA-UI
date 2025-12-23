@@ -117,8 +117,8 @@ const PlaybackView: React.FC<PlaybackViewProps> = ({ onToggleSidebar, isSidebarV
 
   return (
     <div className="flex flex-col h-full w-full bg-gray-50 dark:bg-slate-950">
-        {/* Playback Header */}
-        <div className="h-14 bg-white dark:bg-slate-900 border-b border-gray-200 dark:border-slate-800 flex items-center justify-between px-2 md:px-4 z-10 shrink-0 shadow-sm transition-colors duration-200">
+        {/* Playback Header - Increased Z-Index to z-30 */}
+        <div className="h-14 bg-white dark:bg-slate-900 border-b border-gray-200 dark:border-slate-800 flex items-center justify-between px-2 md:px-4 z-30 shrink-0 shadow-sm transition-colors duration-200">
            <div className="flex items-center gap-1 md:gap-2 text-base text-gray-500 dark:text-gray-400">
                <button 
                 onClick={onToggleSidebar}

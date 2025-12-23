@@ -30,8 +30,8 @@ const LiveMatrix: React.FC<LiveMatrixProps> = ({ onToggleSidebar, isSidebarVisib
 
   return (
     <div className="flex flex-col h-full w-full bg-white dark:bg-slate-950">
-        {/* Top Header / Toolbar */}
-        <div className="h-14 bg-white dark:bg-slate-900 border-b border-gray-200 dark:border-slate-800 flex items-center justify-between px-2 md:px-4 z-10 shrink-0 transition-colors duration-200">
+        {/* Top Header / Toolbar - Increased Z-Index to z-30 */}
+        <div className="h-14 bg-white dark:bg-slate-900 border-b border-gray-200 dark:border-slate-800 flex items-center justify-between px-2 md:px-4 z-30 shrink-0 transition-colors duration-200">
            {/* Left: View Controls */}
            <div className="flex items-center gap-2">
               <button 
